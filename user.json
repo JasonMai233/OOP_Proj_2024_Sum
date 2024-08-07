@@ -1,0 +1,14 @@
+{
+  "allUser": [
+    {
+      "username": "admin",
+      "password": "54321",
+      "isEmployee": true
+    },
+    {
+      "username": "renter",
+      "password": "12345",
+      "isEmployee": false
+    }
+  ]
+}

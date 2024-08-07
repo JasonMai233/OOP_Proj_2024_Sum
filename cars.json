@@ -1,0 +1,28 @@
+{
+    "cars": [
+        {
+            "carName": "Toyota Camry",
+            "carAge": 3,
+            "pricePerMonth": 500.0,
+            "rented": false,
+            "renter": "",
+            "requestedForRent": ""
+        },
+        {
+            "carName": "Honda Civic",
+            "carAge": 2,
+            "pricePerMonth": 450.0,
+            "rented": false,
+            "renter": "",
+            "requestedForRent": ""
+        },
+        {
+            "carName": "Ford Mustang",
+            "carAge": 1,
+            "pricePerMonth": 800.0,
+            "rented": false,
+            "renter": "",
+            "requestedForRent": ""
+        }
+    ]
+}
