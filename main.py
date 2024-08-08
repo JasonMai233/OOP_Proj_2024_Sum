@@ -53,7 +53,7 @@ class LoginGUI:
             data = json.load(f)
 
         root = tk.Tk()
-        app = renterGUI(root, current_user)
+        app = renterGUI(root, data, current_user)
         root.mainloop()
 
     def open_employee_GUI(self):
@@ -64,7 +64,7 @@ class LoginGUI:
             data = json.load(f)
     
         root = tk.Tk()
-        app = employeeGUI(root, current_user)
+        app = employeeGUI(root, data, current_user)
         root.mainloop()
 
 
@@ -72,9 +72,10 @@ class LoginGUI:
 
 
 class renterGUI:
-    def __init__(self, root, current_user):
+    def __init__(self, root, data, current_user):
         self.root = root
         self.current_user = current_user
+        self.data = data
         self.root.title("logged in as : {}".format(current_user))
         self.root.geometry("300x600")
         
@@ -92,10 +93,8 @@ class renterGUI:
 
     def open_car_rental_GUI(self):
         current_user = self.current_user
+        data = self.data
         self.root.destroy() 
-
-        with open('cars.json', 'r') as f:
-            data = json.load(f)
             
         root = tk.Tk()
         app = CarRentalGUI(root, data, current_user)
@@ -103,10 +102,8 @@ class renterGUI:
         
     def open_car_return_GUI(self):
         current_user = self.current_user
+        data = self.data
         self.root.destroy() 
-
-        with open('cars.json', 'r') as f:
-            data = json.load(f)
 
         root = tk.Tk()
         app = CarReturnGUI(root, data, current_user)
@@ -237,9 +234,10 @@ class CarReturnGUI:
 
 
 class employeeGUI:
-    def __init__(self, root, current_user):
+    def __init__(self, root, data, current_user):
         self.root = root
         self.current_user = current_user
+        self.data = data
         self.root.title("logged in as : {}".format(current_user))
         self.root.geometry("300x600")
 
@@ -248,34 +246,24 @@ class employeeGUI:
     def create_widgets(self):
 
         # rent button
-        self.login_button = tk.Button(self.root, text="edit database", command=self.open_edit_DB_GUI)
-        self.login_button.pack(pady=20)
+        self.editDB_button = tk.Button(self.root, text="edit database", command=self.open_edit_DB_GUI)
+        self.editDB_button.pack(pady=20)
 
         # return button
-        self.login_button = tk.Button(self.root, text="accept/reject request", command=self.open_car_return_GUI)
-        self.login_button.pack(pady=20)
+        self.decision_button = tk.Button(self.root, text="accept/reject request", command=self.open_decision_GUI)
+        self.decision_button.pack(pady=20)
 
     def open_edit_DB_GUI(self):
         current_user = self.current_user
+        data = self.data
         self.root.destroy() 
-
-        with open('cars.json', 'r') as f:
-            data = json.load(f)
 
         root = tk.Tk()
         app = editDBGUI(root, data, current_user)
         root.mainloop()
 
-    def open_car_return_GUI(self):
-        current_user = self.current_user
-        self.root.destroy() 
-
-        with open('cars.json', 'r') as f:
-            data = json.load(f)
-
-        root = tk.Tk()
-        app = CarReturnGUI(root, data, current_user)
-        root.mainloop()
+    def open_decision_GUI(self):
+        pass
 
 
 
@@ -312,18 +300,18 @@ class editDBGUI:
 
         # Add New Car button
 
-        self.return_button = tk.Button(self.root, text="Add New", command=self.return_car)
-        self.return_button.pack(pady=10)
+        self.ADN_button = tk.Button(self.root, text="Add New", command=self.Open_add_new_GUI)
+        self.ADN_button.pack(pady=10)
         
         # Delete the Car button
-        self.return_button = tk.Button(self.root, text="Delete", command=self.return_car)
-        self.return_button.pack(pady=10)
-        self.return_button.pack_forget()  # Initially hide the button
+        self.EC_button = tk.Button(self.root, text="Delete", command=self.Open_edit_current_GUI)
+        self.EC_button.pack(pady=10)
+        self.EC_button.pack_forget()  # Initially hide the button
 
         # Edit the Car button
-        self.return_button = tk.Button(self.root, text="Edit Information", command=self.return_car)
-        self.return_button.pack(pady=10)
-        self.return_button.pack_forget()  # Initially hide the button
+        self.Del_button = tk.Button(self.root, text="Edit Information", command=self.Delete_current)
+        self.Del_button.pack(pady=10)
+        self.Del_button.pack_forget()  # Initially hide the button
 
     def populate_table(self):
         for car in self.data['cars']:
@@ -333,8 +321,44 @@ class editDBGUI:
         selected_item = self.tree.selection()
         if selected_item:
             self.selected_car = self.tree.item(selected_item)["values"][0]
-            self.return_button.pack()  # Show the button when a car is selected
+            self.Del_button.pack()
+            self.EC_button.pack()  # Show the button when a car is selected
 
+    def Open_add_new_GUI(self):
+        
+        current_user = self.current_user
+        data = self.data
+        #dose not delete current root
+
+        new_root = tk.Tk()
+        app = addOrEditGUI(root, data, current_user)
+        new_root.mainloop()
+
+    def Open_edit_current_GUI(self):
+        current_user = self.current_user
+        data = self.data
+        #dose not delete current root
+
+        new_root = tk.Tk()
+        app = addOrEditGUI(root, data, current_user)
+        new_root.mainloop()
+        
+    def open_decision_GUI(self):
+        pass
+ 
+    def Delete_current(self):
+        pass
+
+
+
+
+
+class addOrEditGUI:
+    pass
+
+
+class DecisionGUI:
+    pass
 
 
 
