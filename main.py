@@ -29,11 +29,21 @@ class LoginGUI:
         self.login_button = tk.Button(self.root, text="Login", command=self.login)
         self.login_button.pack(pady=20)
 
+        # register button
+        self.register_button = tk.Button(self.root, text="Register", command=self.open_register_gui)
+        self.register_button.pack(pady=10)
+
         #shortcut used for test, delete them later
         self.btn1 = tk.Button(self.root, text="Test_renter", command=self.SC_R)
         self.btn1.pack(pady=20)
         self.btn2 = tk.Button(self.root, text="Test_employee", command=self.SC_E)
         self.btn2.pack(pady=20)
+
+    def open_register_gui(self):
+        self.root.destroy()
+        root = tk.Tk()
+        app = RegisterGUI(self.data, root)
+        root.mainloop()
 
     def login(self):
         inputUsername = self.username_entry.get()
@@ -79,6 +89,72 @@ class LoginGUI:
     def SC_E(self):
         self.current_user = "employee"
         self.open_employee_GUI()
+
+class RegisterGUI:
+    def __init__(self, data, root):
+        self.root = root
+        self.data = data
+        self.root.title("Register")
+        self.root.geometry("300x300")
+
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Username label and entry
+        self.username_label = tk.Label(self.root, text="Username")
+        self.username_label.pack(pady=5)
+        self.username_entry = tk.Entry(self.root)
+        self.username_entry.pack(pady=5)
+
+        # Password label and entry
+        self.password_label = tk.Label(self.root, text="Password")
+        self.password_label.pack(pady=5)
+        self.password_entry = tk.Entry(self.root, show="*")
+        self.password_entry.pack(pady=5)
+
+        # User type selection
+        self.user_type = tk.StringVar(value="renter")
+        self.renter_radio = tk.Radiobutton(self.root, text="Renter", variable=self.user_type, value="renter")
+        self.renter_radio.pack()
+        self.employee_radio = tk.Radiobutton(self.root, text="Employee", variable=self.user_type, value="employee")
+        self.employee_radio.pack()
+
+        # Register button
+        self.register_button = tk.Button(self.root, text="Register", command=self.register)
+        self.register_button.pack(pady=20)
+
+        # Back to Login button
+        self.back_button = tk.Button(self.root, text="Back to Login", command=self.back_to_login)
+        self.back_button.pack(pady=10)
+
+    def register(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        is_employee = self.user_type.get() == "employee"
+
+        if not username or not password:
+            messagebox.showerror("Error", "Username and password cannot be empty")
+            return
+
+        new_user = {
+            "username": username,
+            "password": password,
+            "isEmployee": is_employee
+        }
+
+        self.data["allUser"].append(new_user)
+
+        with open('user.json', 'w') as f:
+            json.dump(self.data, f, indent=2)
+
+        messagebox.showinfo("Success", "User registered successfully")
+        self.back_to_login()
+
+    def back_to_login(self):
+        self.root.destroy()
+        root = tk.Tk()
+        app = LoginGUI(self.data, root)
+        root.mainloop()
 
 class renterGUI:
     def __init__(self, data, root, current_user):
