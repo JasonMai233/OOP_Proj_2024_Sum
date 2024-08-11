@@ -240,6 +240,16 @@ class CarRentalGUI:
         self.rent_button.pack(pady=10)
         self.rent_button.pack_forget()  # Initially hide the button
 
+        # Back button
+        self.back_button = tk.Button(self.root, text="Back", command=self.back_to_renter_gui)
+        self.back_button.pack(pady=10)
+
+    def back_to_renter_gui(self):
+        self.root.destroy()
+        root = tk.Tk()
+        app = renterGUI(self.data, root, self.current_user)
+        root.mainloop()
+
     def populate_table(self):
         for car in self.data['cars']:
             if not car['rented'] and car['requestedForRent'] == "":
@@ -297,6 +307,16 @@ class CarReturnGUI:
         self.return_button = tk.Button(self.root, text="Return the Car", command=self.return_car)
         self.return_button.pack(pady=10)
         self.return_button.pack_forget()  # Initially hide the button
+
+        # Back button
+        self.back_button = tk.Button(self.root, text="Back", command=self.back_to_renter_gui)
+        self.back_button.pack(pady=10)
+
+    def back_to_renter_gui(self):
+        self.root.destroy()
+        root = tk.Tk()
+        app = renterGUI(self.data, root, self.current_user)
+        root.mainloop()
 
     def populate_table(self):
         for car in self.data['cars']:
@@ -415,6 +435,16 @@ class editDBGUI:
         self.Del_button = tk.Button(self.root, text="Delete", command=self.Delete_current)
         self.Del_button.pack(pady=10)
         self.Del_button.pack_forget()  # Initially hide the button
+
+        # Back Button
+        self.back_button = tk.Button(self.root, text="Back", command=self.back_to_employee_gui)
+        self.back_button.pack(pady=10)
+
+    def back_to_employee_gui(self):
+        self.root.destroy()
+        root = tk.Tk()
+        app = employeeGUI(self.data, root, self.current_user)
+        root.mainloop()
 
     def populate_table(self):
         for car in self.data['cars']:   
@@ -595,6 +625,16 @@ class DecisionGUI:
         self.Detail_button = tk.Button(self.root, text="Check Detail", command=self.Check_Detail)
         self.Detail_button.pack(pady=10)
         self.Detail_button.pack_forget() # Initially hide the button
+
+        # Back Button
+        self.back_button = tk.Button(self.root, text="Back", command=self.back_to_employee_gui)
+        self.back_button.pack(pady=10)
+
+    def back_to_employee_gui(self):
+        self.root.destroy()
+        root = tk.Tk()
+        app = employeeGUI(self.data, root, self.current_user)
+        root.mainloop()
 
     def populate_table(self):
         for car in self.data['cars']:   
