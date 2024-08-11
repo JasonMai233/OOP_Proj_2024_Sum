@@ -169,12 +169,24 @@ class renterGUI:
     def create_widgets(self):
 
         # rent button
-        self.login_button = tk.Button(self.root, text="rent a car", command=self.open_car_rental_GUI)
+        self.login_button = tk.Button(self.root, text="Rent a car", command=self.open_car_rental_GUI)
         self.login_button.pack(pady=20)
 
         # return button
-        self.login_button = tk.Button(self.root, text="return a car", command=self.open_car_return_GUI)
+        self.login_button = tk.Button(self.root, text="Return a car", command=self.open_car_return_GUI)
         self.login_button.pack(pady=20)
+
+        # logout button
+        self.logout_button = tk.Button(self.root, text="Logout", command=self.logout)
+        self.logout_button.pack(pady=20)
+
+    def logout(self):
+        self.root.destroy()
+        root = tk.Tk()
+        with open('user.json', 'r') as users:
+            UserData = json.load(users)
+        app = LoginGUI(UserData, root)
+        root.mainloop()
 
     def open_car_rental_GUI(self):
         current_user = self.current_user
@@ -195,62 +207,62 @@ class renterGUI:
         root.mainloop()
 
 class CarRentalGUI:
-        def __init__(self, data, root, current_user):
-            self.root = root
-            self.data = data
-            self.current_user = current_user
-            self.root.title("Car Rental Service")
+    def __init__(self, data, root, current_user):
+        self.root = root
+        self.data = data
+        self.current_user = current_user
+        self.root.title("Car Rental Service")
 
-            # Create and configure the frame
-            self.frame = ttk.Frame(self.root)
-            self.frame.pack(fill=tk.BOTH, expand=True)
+        # Create and configure the frame
+        self.frame = ttk.Frame(self.root)
+        self.frame.pack(fill=tk.BOTH, expand=True)
 
-            # Create and configure the treeview
-            self.tree = ttk.Treeview(self.frame, columns=("id", "carName", "carAge", "pricePerMonth"), show="headings")
-            self.tree.heading("carName", text="Car Name")
-            self.tree.heading("carAge", text="Car Age")
-            self.tree.heading("pricePerMonth", text="Price Per Month")
-            self.tree.column("id", width=0, stretch=tk.NO)
-            self.tree.bind("<<TreeviewSelect>>", self.on_tree_select)
+        # Create and configure the treeview
+        self.tree = ttk.Treeview(self.frame, columns=("id", "carName", "carAge", "pricePerMonth"), show="headings")
+        self.tree.heading("carName", text="Car Name")
+        self.tree.heading("carAge", text="Car Age")
+        self.tree.heading("pricePerMonth", text="Price Per Month")
+        self.tree.column("id", width=0, stretch=tk.NO)
+        self.tree.bind("<<TreeviewSelect>>", self.on_tree_select)
 
-            # Add the available cars to the table
-            self.populate_table()
+        # Add the available cars to the table
+        self.populate_table()
 
-            # Create and configure the scrollbar
-            self.vsb = ttk.Scrollbar(self.frame, orient="vertical", command=self.tree.yview)
-            self.vsb.pack(side=tk.RIGHT, fill=tk.Y)
-            self.tree.configure(yscrollcommand=self.vsb.set)
+        # Create and configure the scrollbar
+        self.vsb = ttk.Scrollbar(self.frame, orient="vertical", command=self.tree.yview)
+        self.vsb.pack(side=tk.RIGHT, fill=tk.Y)
+        self.tree.configure(yscrollcommand=self.vsb.set)
 
-            self.tree.pack(fill=tk.BOTH, expand=True)
+        self.tree.pack(fill=tk.BOTH, expand=True)
 
-            # Rent the Car button
-            self.rent_button = tk.Button(self.root, text="Rent the Car", command=self.rent_car)
-            self.rent_button.pack(pady=10)
-            self.rent_button.pack_forget()  # Initially hide the button
+        # Rent the Car button
+        self.rent_button = tk.Button(self.root, text="Rent the Car", command=self.rent_car)
+        self.rent_button.pack(pady=10)
+        self.rent_button.pack_forget()  # Initially hide the button
 
-        def populate_table(self):
-            for car in self.data['cars']:
-                if not car['rented'] and car['requestedForRent'] == "":
-                    self.tree.insert("", tk.END, values=(car["id"], car["carName"], car["carAge"], car["pricePerMonth"]))
+    def populate_table(self):
+        for car in self.data['cars']:
+            if not car['rented'] and car['requestedForRent'] == "":
+                self.tree.insert("", tk.END, values=(car["id"], car["carName"], car["carAge"], car["pricePerMonth"]))
 
-        def on_tree_select(self, event):
-            selected_item = self.tree.selection()
-            if selected_item:
-                self.selected_car = self.tree.item(selected_item)["values"][0]
-                print(self.selected_car)
-                self.rent_button.pack()  # Show the button when a car is selected
+    def on_tree_select(self, event):
+        selected_item = self.tree.selection()
+        if selected_item:
+            self.selected_car = self.tree.item(selected_item)["values"][0]
+            print(self.selected_car)
+            self.rent_button.pack()  # Show the button when a car is selected
 
-        def rent_car(self):
-            for car in self.data['cars']:
-                if car["id"] == self.selected_car:
-                    car["requestedForRent"] = self.current_user
-                    break
-            with open('cars.json', 'w') as f:
-                json.dump(self.data, f, indent=4)
-            messagebox.showinfo("Success", f"You have requested to rent {self.selected_car}.")
-            self.tree.delete(*self.tree.get_children())
-            self.populate_table()
-            self.rent_button.pack_forget()  # Hide the button after renting the car
+    def rent_car(self):
+        for car in self.data['cars']:
+            if car["id"] == self.selected_car:
+                car["requestedForRent"] = self.current_user
+                break
+        with open('cars.json', 'w') as f:
+            json.dump(self.data, f, indent=4)
+        messagebox.showinfo("Success", f"You have requested to rent {self.selected_car}.")
+        self.tree.delete(*self.tree.get_children())
+        self.populate_table()
+        self.rent_button.pack_forget()  # Hide the button after renting the car
 
 class CarReturnGUI:
     def __init__(self, data, root, current_user):
@@ -324,12 +336,24 @@ class employeeGUI:
     def create_widgets(self):
 
         # rent button
-        self.editDB_button = tk.Button(self.root, text="edit database", command=self.open_edit_DB_GUI)
+        self.editDB_button = tk.Button(self.root, text="Edit database", command=self.open_edit_DB_GUI)
         self.editDB_button.pack(pady=20)
 
         # return button
-        self.decision_button = tk.Button(self.root, text="accept/reject request", command=self.open_decision_GUI)
+        self.decision_button = tk.Button(self.root, text="Accept/reject request", command=self.open_decision_GUI)
         self.decision_button.pack(pady=20)
+
+        # logout button
+        self.logout_button = tk.Button(self.root, text="Logout", command=self.logout)
+        self.logout_button.pack(pady=20)
+
+    def logout(self):
+        self.root.destroy()
+        root = tk.Tk()
+        with open('user.json', 'r') as users:
+            UserData = json.load(users)
+        app = LoginGUI(UserData, root)
+        root.mainloop()
 
     def open_edit_DB_GUI(self):
         current_user = self.current_user

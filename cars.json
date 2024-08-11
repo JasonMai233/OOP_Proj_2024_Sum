@@ -14,8 +14,8 @@
             "carName": "Honda Civic",
             "carAge": 2,
             "pricePerMonth": 450.0,
-            "rented": true,
-            "renter": "renter",
+            "rented": false,
+            "renter": "",
             "requestedForRent": ""
         },
         {
