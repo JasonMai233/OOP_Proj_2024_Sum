@@ -33,12 +33,6 @@ class LoginGUI:
         self.register_button = tk.Button(self.root, text="Register", command=self.open_register_gui)
         self.register_button.pack(pady=10)
 
-        #shortcut used for test, delete them later
-        self.btn1 = tk.Button(self.root, text="Test_renter", command=self.SC_R)
-        self.btn1.pack(pady=20)
-        self.btn2 = tk.Button(self.root, text="Test_employee", command=self.SC_E)
-        self.btn2.pack(pady=20)
-
     def open_register_gui(self):
         self.root.destroy()
         root = tk.Tk()
@@ -81,7 +75,6 @@ class LoginGUI:
         app = employeeGUI(data, root, current_user)
         root.mainloop()
 
-    #delete the below later
     def SC_R(self):
         self.current_user = "renter"
         self.open_renter_GUI()
