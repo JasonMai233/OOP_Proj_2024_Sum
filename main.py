@@ -162,12 +162,12 @@ class renterGUI:
     def create_widgets(self):
 
         # rent button
-        self.login_button = tk.Button(self.root, text="Rent a car", command=self.open_car_rental_GUI)
-        self.login_button.pack(pady=20)
+        self.rent_button = tk.Button(self.root, text="Rent a car", command=self.open_car_rental_GUI)
+        self.rent_button.pack(pady=20)
 
         # return button
-        self.login_button = tk.Button(self.root, text="Return a car", command=self.open_car_return_GUI)
-        self.login_button.pack(pady=20)
+        self.return_button = tk.Button(self.root, text="Return a car", command=self.open_car_return_GUI)
+        self.return_button.pack(pady=20)
 
         # logout button
         self.logout_button = tk.Button(self.root, text="Logout", command=self.logout)
@@ -416,18 +416,18 @@ class editDBGUI:
         self.tree.pack(fill=tk.BOTH, expand=True)
 
         # Add New Car button
-        self.ADN_button = tk.Button(self.root, text="Add New", command=self.Open_add_new_GUI)
-        self.ADN_button.pack(pady=10)
+        self.add_button = tk.Button(self.root, text="Add New", command=self.Open_add_new_GUI)
+        self.add_button.pack(pady=10)
 
-        # Delete the Car button
-        self.EC_button = tk.Button(self.root, text="Edit Information", command=self.Open_edit_current_GUI)
-        self.EC_button.pack(pady=10)
-        self.EC_button.pack_forget()  # Initially hide the button
+        # Edit button
+        self.edit_button = tk.Button(self.root, text="Edit Information", command=self.Open_edit_current_GUI)
+        self.edit_button.pack(pady=10)
+        self.edit_button.pack_forget()  # Initially hide the button
 
-        # Edit the Car button
-        self.Del_button = tk.Button(self.root, text="Delete", command=self.Delete_current)
-        self.Del_button.pack(pady=10)
-        self.Del_button.pack_forget()  # Initially hide the button
+        # Delete button
+        self.delete_button = tk.Button(self.root, text="Delete", command=self.Delete_current)
+        self.delete_button.pack(pady=10)
+        self.delete_button.pack_forget()  # Initially hide the button
 
         # Back Button
         self.back_button = tk.Button(self.root, text="Back", command=self.back_to_employee_gui)
@@ -457,8 +457,8 @@ class editDBGUI:
         selected_item = self.tree.selection()
         if selected_item:
             self.selected_car = self.tree.item(selected_item)["values"][0]
-            self.Del_button.pack()
-            self.EC_button.pack()  # Show the button when a car is selected
+            self.delete_button.pack()
+            self.edit_button.pack()  # Show the button when a car is selected
 
     def Open_add_new_GUI(self):
         current_user = self.current_user
